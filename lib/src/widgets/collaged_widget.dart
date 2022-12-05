@@ -9,7 +9,7 @@ class ImageCollage extends StatefulWidget {
   const ImageCollage({
     Key? key,
     required this.images,
-    this.onClick,
+    required this.onClick,
     this.widthSize = 0,
     this.noImageText = "Unable to load",
     this.showMoreBackgroundColor = Colors.black,
