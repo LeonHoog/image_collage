@@ -1,5 +1,6 @@
 name: image_collage_exemple
 description: flutter widget component that renders the images collaged like facebook deos
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.3+1
 
 environment:
@@ -8,11 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^0.1.2
-  like_button: ^2.0.4
 
   image_collage:
-    # path: ../
+    path: ../
 
 dev_dependencies:
   flutter_test:

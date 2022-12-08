@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:image_collage/src/extentions/expand_equally.dart';
+import 'package:image_collage/src/extensions/expand_equally.dart';
 import 'package:image_collage/src/models/image.dart';
 import 'package:image_collage/src/models/image_layout.dart';
 import 'package:image_collage/src/widgets/show_image.dart';
 
 class ImageCollage extends StatefulWidget {
-  // Image Collage: Stateful Widget
   const ImageCollage({
     Key? key,
-    required this.images,
+    this.images,
+    this.heroTag,
     required this.onClick,
     this.widthSize = 0,
     this.noImageText = "Unable to load",
@@ -24,38 +24,30 @@ class ImageCollage extends StatefulWidget {
   })  : assert(showMoreBackgroundOpacity <= 1),
         super(key: key);
 
-  // list of the images
-  final List<Img> images;
-
-  // onClick on the image it gives the clicked image & the list of the images
-  final Function(Img, List<Img>)? onClick;
-
-  // margins that apply for the container that holds the images
+  /// list of the images
+  final List<Img>? images;
+  /// hero tag for image
+  final Object? heroTag;
+  /// onClick on the image it gives the clicked image & the list of the images
+  final Function(Img?, List<Img>?)? onClick;
+  /// margins that apply for the container that holds the images
   final EdgeInsets margin;
-
-  // by default will get width size
+  /// by default will get width size
   final double widthSize;
-
-  // show more string that will be shown when there is more than 3 images
-  // default: +(how much)
+  /// show more string that will be shown when there is more than 3 images
+  /// default: +(how much)
   final String showMore;
-
-  // background color of the last image which will be as a filter
+  /// background color of the last image which will be as a filter
   final Color showMoreBackgroundColor;
-
-  // background opacity of the last iamge
+  /// background opacity of the last iamge
   final double showMoreBackgroundOpacity;
-
-  // show more textStyle
+  /// show more textStyle
   final TextStyle showMoreTextStyle;
-
-  // if no image found in the list, it will show this text
+  /// if no image found in the list, it will show this text
   final String noImageText;
-
-  // no images textStyle
+  /// no images textStyle
   final TextStyle noImageTextStyle;
-
-  // no image background color
+  /// no image background color
   final Color noImageBackgroundColor;
 
   @override
@@ -73,9 +65,7 @@ class ImageCollageState extends State<ImageCollage> {
   @override
   Widget build(BuildContext context) {
     if (widget.widthSize == 0) {
-      size = MediaQuery.of(context).size.width -
-          widget.margin.left -
-          widget.margin.right;
+      size = MediaQuery.of(context).size.width - widget.margin.left - widget.margin.right;
     } else {
       size = widget.widthSize;
     }
@@ -87,141 +77,142 @@ class ImageCollageState extends State<ImageCollage> {
   }
 
   Widget _buildLayout(context) {
-    switch (widget.images.length) {
-      case 0:
-        return Container(
-          color: widget.noImageBackgroundColor,
-          width: widget.widthSize == 0
-              ? MediaQuery.of(context).size.width -
-                  widget.margin.left -
-                  widget.margin.right
-              : widget.widthSize,
-          child: Center(
-            child: Text(
-              widget.noImageText,
-              style: widget.noImageTextStyle,
-            ),
-          ),
-        );
-      case 1:
+    switch (widget.images?.length) {
+      case 0: //no images provided
         return ShowImage(
-          image: widget.images.first,
-          callBack: (image) => widget.onClick!(image, widget.images),
+          callBack: (Img) => widget.onClick!(null,null),
           layout: ImageLayout.full,
           margin: widget.margin,
           noImageBackgroundColor: widget.noImageBackgroundColor,
-          noImageText: '',
+          noImageText: widget.noImageText,
           width: widget.widthSize,
         );
-      case 2:
+      case 1: //1 image provided
+        return ShowImage(
+          image: widget.images!.first,
+          heroTag: widget.heroTag,
+          callBack: (image) => widget.onClick!(image!, widget.images!),
+          layout: ImageLayout.full,
+          margin: widget.margin,
+          noImageBackgroundColor: widget.noImageBackgroundColor,
+          noImageText: widget.noImageText,
+          width: widget.widthSize,
+        );
+      case 2: //2 images provided
         return Row(
           children: [
             ShowImage(
-              image: widget.images[0],
-              callBack: (image) => widget.onClick!(image, widget.images),
+              image: widget.images![0],
+              heroTag: widget.heroTag,
+              callBack: (image) => widget.onClick!(image!, widget.images!),
               layout: ImageLayout.half,
               margin: widget.margin,
               noImageBackgroundColor: widget.noImageBackgroundColor,
-              noImageText: '',
+              noImageText: widget.noImageText,
               width: widget.widthSize,
             ),
             ShowImage(
-              image: widget.images[1],
-              callBack: (image) => widget.onClick!(image, widget.images),
+              image: widget.images![1],
+              heroTag: widget.heroTag,
+              callBack: (image) => widget.onClick!(image!, widget.images!),
               layout: ImageLayout.half,
               margin: widget.margin,
               noImageBackgroundColor: widget.noImageBackgroundColor,
-              noImageText: '',
+              noImageText: widget.noImageText,
               width: widget.widthSize,
             )
           ].expandEqually().toList(),
         );
 
-      case 3:
+      case 3: //3 images provided
         return Row(
           children: [
             ShowImage(
-              image: widget.images[0],
-              callBack: (image) => widget.onClick!(image, widget.images),
+              image: widget.images![0],
+              heroTag: widget.heroTag,
+              callBack: (image) => widget.onClick!(image!, widget.images!),
               layout: ImageLayout.half,
               margin: widget.margin,
               noImageBackgroundColor: widget.noImageBackgroundColor,
-              noImageText: '',
+              noImageText: widget.noImageText,
               width: widget.widthSize,
             ),
             Column(
               children: [
                 ShowImage(
-                  image: widget.images[1],
-                  callBack: (image) => widget.onClick!(image, widget.images),
+                  image: widget.images![1],
+                  heroTag: widget.heroTag,
+                  callBack: (image) => widget.onClick!(image!, widget.images!),
                   layout: ImageLayout.quarter,
                   margin: widget.margin,
                   noImageBackgroundColor: widget.noImageBackgroundColor,
-                  noImageText: '',
+                  noImageText: widget.noImageText,
                   width: widget.widthSize,
                 ),
                 ShowImage(
-                  image: widget.images[2],
-                  callBack: (image) => widget.onClick!(image, widget.images),
+                  image: widget.images![2],
+                  heroTag: widget.heroTag,
+                  callBack: (image) => widget.onClick!(image!, widget.images!),
                   layout: ImageLayout.quarter,
                   margin: widget.margin,
                   noImageBackgroundColor: widget.noImageBackgroundColor,
-                  noImageText: '',
+                  noImageText: widget.noImageText,
                   width: widget.widthSize,
                 ),
               ].expandEqually().toList(),
             )
           ].expandEqually().toList(),
         );
-      default:
+      default: //more than 3 images provided
         return Row(
           children: [
             ShowImage(
-              image: widget.images[0],
-              callBack: (image) => widget.onClick!(image, widget.images),
+              image: widget.images![0],
+              heroTag: widget.heroTag,
+              callBack: (image) => widget.onClick!(image!, widget.images!),
               layout: ImageLayout.half,
               margin: widget.margin,
               noImageBackgroundColor: widget.noImageBackgroundColor,
-              noImageText: '',
+              noImageText: widget.noImageText,
               width: widget.widthSize,
             ),
             Column(
               children: [
                 ShowImage(
-                  image: widget.images[1],
-                  callBack: (image) => widget.onClick!(image, widget.images),
+                  image: widget.images![1],
+                  heroTag: widget.heroTag,
+                  callBack: (image) => widget.onClick!(image!, widget.images!),
                   layout: ImageLayout.quarter,
                   margin: widget.margin,
                   noImageBackgroundColor: widget.noImageBackgroundColor,
-                  noImageText: '',
+                  noImageText: widget.noImageText,
                   width: widget.widthSize,
                 ),
                 Stack(
                   alignment: Alignment.center,
                   children: [
                     ShowImage(
-                      image: widget.images[2],
+                      image: widget.images![2],
+                      heroTag: widget.heroTag,
                       callBack: (image) =>
-                          widget.onClick!(image, widget.images),
+                          widget.onClick!(image!, widget.images!),
                       layout: ImageLayout.quarter,
                       margin: widget.margin,
                       noImageBackgroundColor: widget.noImageBackgroundColor,
-                      noImageText: '',
+                      noImageText: widget.noImageText,
                       width: widget.widthSize,
                     ),
                     Positioned.fill(
                       child: GestureDetector(
-                        onTap: () =>
-                            widget.onClick!(widget.images[3], widget.images),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: widget.showMoreBackgroundColor.withOpacity(
-                                  widget.showMoreBackgroundOpacity)),
+                        onTap: () => widget.onClick!(widget.images![3], widget.images!),
+                        child: ColoredBox(
+                          color: widget.showMoreBackgroundColor
+                              .withOpacity(widget.showMoreBackgroundOpacity),
                           child: Center(
                             child: Text(
                               widget.showMore != ""
                                   ? widget.showMore
-                                  : '+${widget.images.length - 3}',
+                                  : '+${widget.images!.length - 3}',
                               style: widget.showMoreTextStyle,
                             ),
                           ),

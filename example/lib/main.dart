@@ -1,16 +1,19 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:image_collage/image_collage.dart';
-import 'package:like_button/like_button.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
       home: Collage(),
     );
   }
@@ -80,7 +83,7 @@ class _CollageState extends State<Collage> {
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [Text("Post 3"), Icon(Icons.more_vert)],
+                          children: [Text("Post 4"), Icon(Icons.more_vert)],
                         ),
                       ),
                       ImageCollage(
@@ -103,8 +106,33 @@ class _CollageState extends State<Collage> {
                   child: Column(
                     children: [
                       Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [Text("Post 3"), Icon(Icons.more_vert)],
+                        ),
+                      ),
+                      ImageCollage(
+                        images: [],
+                        onClick: (clickedImage, images) {
+                          inspect(clickedImage);
+                          inspect(images);
+                        },
+                      ),
+                      _InteractionBar(),
+                    ],
+                  )),
+              Divider(
+                thickness: 1,
+                height: 1,
+                color: Colors.grey,
+              ),
+              Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [Text("Post 2"), Icon(Icons.more_vert)],
@@ -127,8 +155,7 @@ class _CollageState extends State<Collage> {
                   child: Column(
                     children: [
                       Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [Text("Post 1"), Icon(Icons.more_vert)],
@@ -159,12 +186,12 @@ class _InteractionBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          LikeButton(),
+          const Icon(Icons.thumb_up_alt, color: Colors.grey,),
           Row(
-            children: [
-              Icon(Icons.share),
+            children: const [
+              Icon(Icons.share, color: Colors.grey,),
               SizedBox(width: 5),
-              Icon(Icons.library_add)
+              Icon(Icons.library_add, color: Colors.grey,),
             ],
           )
         ],
